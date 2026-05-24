@@ -1,0 +1,131 @@
+{
+    "layer": "top",
+    "position": "top",
+    "spacing": 0,
+    "margin-top": 4,
+    "margin-left": 6,
+    "margin-right": 6,
+    "exclusive": true,
+    "passthrough": false,
+
+    "modules-left": ["custom/clock", "custom/media", "custom/settings"],
+    "modules-center": ["custom/search", "hyprland/workspaces"],
+    "modules-right": ["tray", "custom/notification", "", "network", "bluetooth", "pulseaudio", "battery"],
+
+    "custom/clock": {
+        "exec": "~/.config/waybar/scripts/clock.sh",
+        "return-type": "json",
+        "interval": 1,
+        "escape": false,
+        "tooltip": false
+    },
+
+    "custom/media": {
+        "exec": "bash ~/.config/rofi/scripts/media_waybar.sh",
+        "return-type": "json",
+        "on-click": "eww open --toggle music-menu",
+        "escape": true,
+        "max-length": 40
+    },
+
+    "custom/search": {
+        "format": "󰍉",
+        "tooltip": "App Launcher",
+        "on-click": "bash ~/.config/rofi/scripts/launcher.sh"
+    },
+
+    "custom/settings": {
+        "format": "",
+        "tooltip": "Settings",
+        "on-click": "hyprmod"
+    },
+
+    "hyprland/workspaces": {
+        "format": "{id}",
+        "on-click": "activate",
+        "active-only": false,
+        "all-outputs": false,
+        "persistent-workspaces": {
+            "1": [], "2": [], "3": [], "4": [],
+            "5": [], "6": [], "7": [], "8": []
+        },
+        "sort-by-number": true
+    },
+
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "󱅫",
+            "none":         "󰂚",
+            "dnd-notification": "󱅫",
+            "dnd-none":     "󰂛",
+            "inhibited-notification": "󱅫",
+            "inhibited-none": "󰂚",
+            "dnd-inhibited-notification": "󱅫",
+            "dnd-inhibited-none": "󰂛"
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    },
+
+    "tray": {
+        "spacing": 8,
+        "icon-size": 16,
+        "show-passive-items": true
+    },
+
+    "network": {
+        "interval": 5,
+        "format-wifi": "󰤨 {essid}",
+        "format-ethernet": "󰈀 {ifname}",
+        "format-disconnected": "󰤮",
+        "format-disabled": "󰤮",
+        "format-linked": "󰈁 {ifname}",
+        "tooltip-format-wifi": "  {ipaddr}",
+        "tooltip-format-ethernet": "󰈀  {ifname}\n   {ipaddr}/{cidr}",
+        "tooltip-format-disconnected": "Disconnected",
+        "max-length": 18,
+        "on-click": "bash ~/.config/eww/scripts/eww-toggle.sh wifi-menu"
+    },
+
+    "bluetooth": {
+        "format": "󰂯",
+        "format-on": "󰂯",
+        "format-off": "󰂲",
+        "format-connected": "󰂱 {device_alias}",
+        "tooltip-format": "Bluetooth {status}",
+        "tooltip-format-connected": "{device_alias}",
+        "max-length": 20,
+        "on-click": "bash ~/.config/eww/scripts/eww-toggle.sh bt-menu"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"],
+            "headphone": "󰋋",
+            "headset": "󰋎"
+        },
+        "scroll-step": 5,
+        "tooltip-format": "{desc}",
+        "on-click": "bash ~/.config/eww/scripts/eww-toggle.sh vol-menu",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    },
+
+    "battery": {
+        "states": { "warning": 30, "critical": 15 },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰚥 {capacity}%",
+        "format-full": "󰁹",
+        "format-icons": ["󰁺","󰁻","󰁼","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
+        "tooltip-format": "{timeTo}  ·  {power}W",
+        "on-click": "bash ~/.config/eww/scripts/eww-toggle.sh power-menu"
+    }
+}

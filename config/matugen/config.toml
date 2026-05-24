@@ -1,0 +1,74 @@
+[config]
+reload_apps = false
+
+[templates.kitty]
+input_path = "~/.config/matugen/templates/kitty-colors.conf.template"
+output_path = "~/.config/kitty/kitty-matugen-colors.conf"
+
+[templates.neovim]
+input_path = "~/.config/matugen/templates/nvim-colors.lua.template"
+output_path = "~/.config/nvim/matugen_colors.lua"
+
+[templates.cava]
+input_path = "~/.config/matugen/templates/cava-colors.ini.template"
+output_path = "~/.config/cava/colors"
+
+[templates.swayosd]
+input_path = "~/.config/matugen/templates/swayosd.css.template"
+output_path = "~/.config/swayosd/style.css"
+
+[templates.gtk]
+input_path = "~/.config/matugen/templates/gtk.css.template"
+output_path = "~/.cache/matugen/colors-gtk.css"
+
+[templates.qt5ct]
+input_path = "~/.config/matugen/templates/qtct.conf.template"
+output_path = "~/.config/qt5ct/colors/matugen.conf"
+
+[templates.qt6ct]
+input_path = "~/.config/matugen/templates/qtct.conf.template"
+output_path = "~/.config/qt6ct/colors/matugen.conf"
+
+[templates.qt5_style]
+input_path = "~/.config/matugen/templates/qt-style.qss.template"
+output_path = "~/.config/qt5ct/qss/matugen-style.qss"
+
+[templates.qt6_style]
+input_path = "~/.config/matugen/templates/qt-style.qss.template"
+output_path = "~/.config/qt6ct/qss/matugen-style.qss"
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland.conf.template'
+output_path = '~/.config/hypr/colors.conf'
+
+[templates.colors-json]
+input_path = "~/.config/matugen/templates/colors.json.template"
+output_path = "~/.config/hypr/matugen_colors.json"
+
+[templates.hyprlock]
+input_path = "~/.config/matugen/templates/hyprlock.conf.template"
+output_path = "~/.config/hypr/hyprlock.conf"
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/waybar.css.template"
+output_path = "~/.config/waybar/style.css"
+
+[templates.swaync]
+input_path = "~/.config/matugen/templates/swaync.css.template"
+output_path = "~/.config/swaync/style.css"
+
+[templates.rofi-powermenu]
+input_path = "~/.config/matugen/templates/rofi-powermenu.rasi.template"
+output_path = "~/.config/rofi/themes/powermenu.rasi"
+
+[templates.rofi-launcher]
+input_path = "~/.config/matugen/templates/rofi-launcher.rasi.template"
+output_path = "~/.config/rofi/themes/launcher.rasi"
+
+[templates.wlogout]
+input_path = "~/.config/matugen/templates/wlogout.css.template"
+output_path = "~/.config/wlogout/style.css"
+
+[templates.eww]
+input_path = "~/.config/matugen/templates/eww.scss.template"
+output_path = "~/.config/eww/eww-theme.scss"

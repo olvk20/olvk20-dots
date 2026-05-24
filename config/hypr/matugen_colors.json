@@ -1,0 +1,12 @@
+{
+  "primary":    "#9dd49e",
+  "on_primary": "#023913",
+  "secondary":  "#b8ccb5",
+  "tertiary":   "#a1ced6",
+  "error":      "#ffb4ab",
+  "bg":         "#0b0f0b",
+  "surface":    "#1c211c",
+  "fg":         "#e0e4db",
+  "fg_dim":     "#c1c9be",
+  "muted":      "#8c9389"
+}

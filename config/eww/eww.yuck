@@ -1,0 +1,340 @@
+;;; ══════════════════════════════════════════════════════
+;;;  eww — popup menus
+;;; ══════════════════════════════════════════════════════
+
+;;; ── Variables ──────────────────────────────────────────
+
+(deflisten wifi
+  :initial "{\"icon\":\"\",\"title\":\"Not Connected\",\"sub\":\"Loading\",\"ssid\":\"\",\"toggle_class\":\"pill-btn\",\"toggle_icon\":\"\",\"toggle_label\":\"Off\",\"disc_class\":\"pill-btn disabled\",\"nav_class\":\"nav-btn\"}"
+  `~/.config/eww/scripts/wifi-listen.sh`)
+
+(defpoll wifi-networks :interval "3600s"
+  :initial "[]"
+  `~/.config/eww/scripts/wifi-networks.sh`)
+
+(defpoll bluetooth :interval "30s"
+  :initial "{\"icon\":\"\",\"name\":\"Not Connected\",\"sub\":\"Loading\",\"mac\":\"\",\"toggle_class\":\"pill-btn\",\"toggle_icon\":\"\",\"toggle_label\":\"Off\",\"toggle_cmd\":\"bluetoothctl power on\",\"disc_class\":\"pill-btn disabled\"}"
+  `~/.config/eww/scripts/bluetooth.sh`)
+
+(defpoll bt-devices :interval "3600s"
+  :initial "[]"
+  `~/.config/eww/scripts/bt-devices.sh`)
+
+(deflisten volume
+  :initial "{\"volume\":50,\"icon\":\"\",\"sink\":\"\",\"slider_class\":\"vol-slider\",\"mute_class\":\"pill-btn\",\"mute_icon\":\"\",\"mute_label\":\"Mute\"}"
+  `~/.config/eww/scripts/volume-listen.sh`)
+
+(deflisten audio-sinks
+  :initial "{\"outputs\":[],\"inputs\":[]}"
+  `~/.config/eww/scripts/audio-sinks.sh`)
+
+(defpoll battery :interval "90s"
+  :initial "{\"percentage\":100,\"status\":\"Unknown\",\"time\":\"\",\"rate_label\":\"\",\"icon\":\"\",\"perf_class\":\"profile-btn\",\"bal_class\":\"profile-btn active\",\"saver_class\":\"profile-btn\"}"
+  `~/.config/eww/scripts/battery.sh`)
+
+(defpoll brightness :interval "5s"
+  :initial "50"
+  `echo $(( $(brightnessctl get 2>/dev/null || echo 50) * 100 / $(brightnessctl max 2>/dev/null || echo 100) ))`)
+
+(defpoll music :interval "1s"
+  :initial "{\"title\":\"Nothing playing\",\"artist\":\"\",\"album\":\"\",\"pos_fmt\":\"0:00\",\"len_fmt\":\"0:00\",\"progress\":0,\"art\":\"/home/olek/.config/eww/assets/art-placeholder.png\",\"play_icon\":\"\",\"loop_icon\":\"\",\"shuffle_class\":\"ctrl-btn\",\"loop_class\":\"ctrl-btn\"}"
+  `~/.config/eww/scripts/music-poll.sh`)
+
+(defvar wifi-connect-ssid "")
+(defvar wifi-connect-pass "")
+
+;;; ══════════════════════════════════════════════════════
+;;;  WiFi — Password prompt
+;;; ══════════════════════════════════════════════════════
+
+(defwindow wifi-password
+  :monitor 0
+  :geometry (geometry :x "6px" :y "2px" :width "300px" :anchor "top right")
+  :stacking "overlay" :exclusive false :focusable true
+  (box :class "menu-root" :orientation "v" :spacing 0
+    (box :class "menu-header" :orientation "v" :spacing 4
+      (label :class "header-title" :text "WiFi Password")
+      (label :class "header-sub" :halign "start" :text {wifi-connect-ssid}))
+    (box :class "pass-section" :orientation "v" :spacing 8
+      (label :class "section-title" :halign "start" :text "Password")
+      (input :class "pass-input"
+             :value {wifi-connect-pass}
+             :onchange "eww update wifi-connect-pass={}"))
+    (box :class "action-row" :orientation "h" :spacing 8
+      (button :class "pill-btn" :hexpand true
+        :onclick "eww close wifi-password; eww open wifi-nets; eww update wifi-connect-pass=\"\""
+        (label :text "Cancel"))
+      (button :class "pill-btn active" :hexpand true
+        :onclick "bash ~/.config/eww/scripts/wifi-do-connect.sh &"
+        (label :text "Connect")))))
+
+;;; ══════════════════════════════════════════════════════
+;;;  WiFi — Main (compact status + nav)
+;;; ══════════════════════════════════════════════════════
+
+(defwindow wifi-menu
+  :monitor 0
+  :geometry (geometry :x "6px" :y "2px" :width "300px" :height "238px" :anchor "top right")
+  :stacking "overlay" :exclusive false :focusable true
+  (box :class "menu-root" :orientation "v" :spacing 0
+    (box :class "menu-header" :orientation "v" :spacing 4
+      (box :orientation "h" :spacing 10
+        (label :class "header-icon" :text {wifi.icon})
+        (label :class "header-title" :text {wifi.title}))
+      (label :class "header-sub" :halign "start" :text {wifi.sub}))
+    (box :class "action-row" :orientation "h" :spacing 6 :halign "start"
+      (button :class {wifi.toggle_class} :onclick "bash ~/.config/eww/scripts/wifi-toggle.sh &"
+        (box :orientation "h" :spacing 5
+          (label :text {wifi.toggle_icon})
+          (label :text {wifi.toggle_label})))
+      (button :class {wifi.disc_class} :onclick "nmcli con down '${wifi.ssid}' &"
+        (box :orientation "h" :spacing 5
+          (label :text "󰤭")
+          (label :text "Disconnect"))))
+    (box :class "nav-section" :orientation "v" :spacing 4
+      (button :class {wifi.nav_class} :hexpand true
+        :onclick "eww update wifi-networks=\"$(~/.config/eww/scripts/wifi-networks.sh)\"; eww open wifi-nets; eww close wifi-menu"
+        (box :orientation "h" :spacing 8 :hexpand true
+          (label :text "󰍡")
+          (label :class "nav-label" :hexpand true :halign "start" :text "Scan Networks")
+          (label :class "nav-arrow" :text "›")))
+      (button :class "nav-btn" :hexpand true
+        :onclick "eww open bt-menu; eww close wifi-menu"
+        (box :orientation "h" :spacing 8 :hexpand true
+          (label :text "󰂯")
+          (label :class "nav-label" :hexpand true :halign "start" :text "Bluetooth")
+          (label :class "nav-arrow" :text "›"))))))
+
+;;; ══════════════════════════════════════════════════════
+;;;  WiFi — Networks sub-menu
+;;; ══════════════════════════════════════════════════════
+
+(defwindow wifi-nets
+  :monitor 0
+  :geometry (geometry :x "6px" :y "2px" :width "300px" :height "295px" :anchor "top right")
+  :stacking "overlay" :exclusive false :focusable true
+  (box :class "menu-root" :orientation "v" :spacing 0
+    (box :class "back-row" :orientation "h" :spacing 6
+      (button :class "back-btn" :hexpand true :onclick "eww close wifi-nets; eww open wifi-menu"
+        (box :orientation "h" :spacing 5 :halign "center"
+          (label :text "‹  Back")))
+      (button :class "back-btn" :hexpand true :onclick "eww update wifi-networks=\"$(~/.config/eww/scripts/wifi-networks.sh)\""
+        (box :orientation "h" :spacing 5 :halign "center"
+          (label :text "󰍡  Rescan"))))
+    (scroll :height 240 :vscroll true
+      (box :class "list-box" :orientation "v" :spacing 4
+        (for net in {wifi-networks}
+          (button :class "list-item"
+            :onclick "bash ~/.config/eww/scripts/wifi-connect.sh '${net.ssid}'"
+            (box :orientation "h" :spacing 4 :hexpand true
+              (label :class "list-icon" :text {net.icon})
+              (label :class "list-name" :hexpand true :halign "start" :text {net.ssid})
+              (label :class "list-meta" :text "${net.signal}%"))))))))
+
+;;; ══════════════════════════════════════════════════════
+;;;  Bluetooth — Main (compact)
+;;; ══════════════════════════════════════════════════════
+
+(defwindow bt-menu
+  :monitor 0
+  :geometry (geometry :x "6px" :y "2px" :width "300px" :height "238px" :anchor "top right")
+  :stacking "overlay" :exclusive false :focusable true
+  (box :class "menu-root" :orientation "v" :spacing 0
+    (box :class "menu-header" :orientation "v" :spacing 4
+      (box :orientation "h" :spacing 10
+        (label :class "header-icon" :text {bluetooth.icon})
+        (label :class "header-title" :text {bluetooth.name}))
+      (label :class "header-sub" :halign "start" :text {bluetooth.sub}))
+    (box :class "action-row" :orientation "h" :spacing 6 :halign "start"
+      (button :class {bluetooth.toggle_class} :onclick "bash ~/.config/eww/scripts/bt-toggle.sh &"
+        (box :orientation "h" :spacing 5
+          (label :text {bluetooth.toggle_icon})
+          (label :text {bluetooth.toggle_label})))
+      (button :class {bluetooth.disc_class} :onclick "bluetoothctl disconnect '${bluetooth.mac}' &"
+        (box :orientation "h" :spacing 5
+          (label :text "󰂱")
+          (label :text "Disconnect"))))
+    (box :class "nav-section" :orientation "v" :spacing 4
+      (button :class {bluetooth.nav_class} :hexpand true
+        :onclick "eww update bt-devices=\"$(bluetoothctl devices | grep -v Connected)\"; eww open bt-scan; eww close bt-menu"
+        (box :orientation "h" :spacing 8 :hexpand true
+          (label :text "󰍱")
+          (label :class "nav-label" :hexpand true :halign "start" :text "Scan Devices")
+          (label :class "nav-arrow" :text "›")))
+      (button :class "nav-btn" :hexpand true
+        :onclick "eww update bt-devices=\"$(bluetoothctl devices)\"; eww open bt-known; eww close bt-menu"
+        (box :orientation "h" :spacing 8 :hexpand true
+          (label :text "󰂯")
+          (label :class "nav-label" :hexpand true :halign "start" :text "Known Devices")
+          (label :class "nav-arrow" :text "›")))
+      (button :class "nav-btn" :hexpand true
+        :onclick "eww open wifi-menu; eww close bt-menu"
+        (box :orientation "h" :spacing 8 :hexpand true
+          (label :text "󰤨")
+          (label :class "nav-label" :hexpand true :halign "start" :text "WiFi")
+          (label :class "nav-arrow" :text "›"))))))
+
+;;; ══════════════════════════════════════════════════════
+;;;  Bluetooth — Devices sub-menu
+;;; ══════════════════════════════════════════════════════
+
+(defwindow bt-scan
+  :monitor 0
+  :geometry (geometry :x "6px" :y "2px" :width "300px" :height "295px" :anchor "top right")
+  :stacking "overlay" :exclusive false :focusable true
+  (box :class "menu-root" :orientation "v" :spacing 0
+    (box :class "back-row" :orientation "h" :spacing 6
+      (button :class "back-btn" :hexpand true :onclick "eww close bt-scan; eww open bt-menu"
+        (box :orientation "h" :spacing 5 :halign "center"
+          (label :text "‹  Back")))
+      (button :class "back-btn" :hexpand true :onclick "eww update bt-devices=\"$(~/.config/eww/scripts/bt-devices.sh)\""
+        (box :orientation "h" :spacing 5 :halign "center"
+          (label :text "󰍱  Scan"))))
+    (scroll :height 240 :vscroll true
+      (box :class "list-box" :orientation "v" :spacing 4
+        (for dev in {bt-devices}
+          (button :class {dev.class}
+            :onclick "${dev.cmd} ${dev.mac} &"
+            (box :orientation "h" :spacing 4 :hexpand true
+              (label :class "list-icon" :text {dev.icon})
+              (label :class "list-name" :hexpand true :halign "start" :text {dev.name})
+              (label :class "list-meta" :text {dev.status}))))))))
+
+;;; ══════════════════════════════════════════════════════
+;;;  Volume Menu
+;;; ══════════════════════════════════════════════════════
+
+(defwindow vol-menu
+  :monitor 0
+  :geometry (geometry :x "6px" :y "2px" :width "300px" :anchor "top right")
+  :stacking "overlay" :exclusive false :focusable true
+  (box :class "menu-root" :orientation "v" :spacing 0
+    (box :class "menu-header" :orientation "v" :spacing 4
+      (box :orientation "h" :spacing 10 :halign "center"
+        (label :class "header-icon" :text {volume.icon})
+        (label :class "header-title" :text "${volume.volume}%"))
+      (label :class "header-sub" :halign "start" :text {volume.sink}))
+    (box :class "slider-section" :orientation "v" :spacing 2
+      (scale :class {volume.slider_class}
+        :value {volume.volume} :min 0 :max 100 :draw-value false
+        :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")
+      (button :class {volume.mute_class} :valign "center" :halign "fill" :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+        (box :orientation "h" :spacing 6 :halign "center"
+          (label :text {volume.mute_icon})
+          (label :text {volume.mute_label}))))
+    (box :class "menu-section" :orientation "v" :spacing 0
+      (label :class "section-title" :halign "start" :text "Output")
+      (box :class "list-box" :orientation "v" :spacing 2 :valign "start"
+        (for sink in {audio-sinks.outputs}
+          (button :class "${sink.item_class} audio-item" :onclick "pactl set-default-sink '${sink.name}'"
+            (box :orientation "h" :spacing 4 :hexpand true
+              (label :class "list-icon" :text "󰓃")
+              (label :class "list-name" :hexpand true :halign "start" :text {sink.description})
+              (label :class "list-meta" :text {sink.active_dot}))))))
+    (box :class "menu-section" :orientation "v" :spacing 0
+      (label :class "section-title" :halign "start" :text "Input")
+      (box :class "list-box" :orientation "v" :spacing 2 :valign "start"
+        (for src in {audio-sinks.inputs}
+          (button :class "${src.item_class} audio-item" :onclick "pactl set-default-source '${src.name}'"
+            (box :orientation "h" :spacing 4 :hexpand true
+              (label :class "list-icon" :text "󰍬")
+              (label :class "list-name" :hexpand true :halign "start" :text {src.description})
+              (label :class "list-meta" :text {src.active_dot}))))))))
+
+;;; ══════════════════════════════════════════════════════
+;;;  Power Menu
+;;; ══════════════════════════════════════════════════════
+
+(defwindow power-menu
+  :monitor 0
+  :geometry (geometry :x "6px" :y "2px" :width "340px" :anchor "top right")
+  :stacking "overlay" :exclusive false :focusable true
+  (box :class "menu-root" :orientation "v" :spacing 0
+    (box :class "battery-card" :orientation "h" :spacing 16
+      (label :class "bat-icon" :text {battery.icon} :valign "center")
+      (box :orientation "v" :spacing 2 :hexpand true :valign "center"
+        (label :class "bat-percent" :halign "start" :text "${battery.percentage}%")
+        (label :class "bat-status"  :halign "start" :text {battery.status})
+        (label :class "bat-time"    :halign "start" :text {battery.time})
+        (label :class "bat-rate"    :halign "start" :text {battery.rate_label})))
+    (box :class "slider-section" :orientation "v" :spacing 6
+      (box :orientation "h" :spacing 8
+        (label :class "slider-icon"  :text "󰃟")
+        (label :class "slider-label" :hexpand true :halign "start" :text "Brightness")
+        (label :class "slider-value" :text "${brightness}%"))
+      (scale :class "brightness-slider"
+        :value {brightness} :min 5 :max 100 :draw-value false
+        :onchange "brightnessctl set {}% -q 2>/dev/null"))
+    (box :class "menu-section" :orientation "v" :spacing 0
+      (label :class "section-title" :halign "start" :text "Mode")
+      (box :class "profile-row" :orientation "h" :spacing 6
+        (button :class {battery.perf_class} :onclick "bash ~/.config/eww/scripts/profile-switch.sh throughput-performance &" :hexpand true
+          (box :orientation "v" :spacing 5 :halign "center"
+            (label :class "profile-icon"  :text "󰓅")
+            (label :class "profile-label" :text "Perf")))
+        (button :class {battery.bal_class} :onclick "bash ~/.config/eww/scripts/profile-switch.sh balanced &" :hexpand true
+          (box :orientation "v" :spacing 5 :halign "center"
+            (label :class "profile-icon"  :text "󰗑")
+            (label :class "profile-label" :text "Balanced")))
+        (button :class {battery.saver_class} :onclick "bash ~/.config/eww/scripts/profile-switch.sh powersave &" :hexpand true
+          (box :orientation "v" :spacing 5 :halign "center"
+            (label :class "profile-icon"  :text "󰌪")
+            (label :class "profile-label" :text "Saver")))))
+    (box :class "menu-section" :orientation "v" :spacing 0
+      (label :class "section-title" :halign "start" :text "Actions")
+      (box :class "power-row" :orientation "h" :spacing 4
+        (button :class "power-btn" :hexpand true :onclick "hyprlock &"
+          (box :orientation "v" :spacing 4 :halign "center"
+            (label :class "power-icon"  :text "󰍁")
+            (label :class "power-label" :text "Lock")))
+        (button :class "power-btn" :hexpand true :onclick "hyprctl dispatch exit &"
+          (box :orientation "v" :spacing 4 :halign "center"
+            (label :class "power-icon"  :text "󰍃")
+            (label :class "power-label" :text "Logout")))
+        (button :class "power-btn" :hexpand true :onclick "systemctl reboot &"
+          (box :orientation "v" :spacing 4 :halign "center"
+            (label :class "power-icon"  :text "󰑙")
+            (label :class "power-label" :text "Reboot")))
+        (button :class "power-btn" :hexpand true :onclick "systemctl suspend &"
+          (box :orientation "v" :spacing 4 :halign "center"
+            (label :class "power-icon"  :text "󰒲")
+            (label :class "power-label" :text "Sleep")))
+        (button :class "power-btn destructive" :hexpand true :onclick "systemctl poweroff &"
+          (box :orientation "v" :spacing 4 :halign "center"
+            (label :class "power-icon"  :text "󰐥")
+            (label :class "power-label" :text "Off")))))))
+
+;;; ══════════════════════════════════════════════════════
+;;;  Music Menu
+;;; ══════════════════════════════════════════════════════
+
+(defwindow music-menu
+  :monitor 0
+  :geometry (geometry :x "6px" :y "2px" :width "380px" :anchor "top left")
+  :stacking "overlay" :exclusive false :focusable true
+  (box :class "menu-root" :orientation "v" :spacing 0
+    (box :class "music-card" :orientation "h" :spacing 14
+      (box :class "art-box"
+        (image :path {music.art} :image-width 80 :image-height 80))
+      (box :orientation "v" :spacing 5 :hexpand true :valign "center"
+        (label :class "track-title"  :halign "start" :text {music.title})
+        (label :class "track-artist" :halign "start" :text {music.artist})
+        (label :class "track-album"  :halign "start" :text {music.album})))
+    (box :class "progress-section" :orientation "v" :spacing 4
+      (scale :class "music-progress"
+        :value {music.progress} :min 0 :max 100 :draw-value false)
+      (box :orientation "h" :spacing 0
+        (label :class "time-label" :hexpand true :halign "start" :text {music.pos_fmt})
+        (label :class "time-label" :halign "end" :text {music.len_fmt})))
+    (box :class "music-controls" :orientation "h" :spacing 6
+      (button :class {music.shuffle_class} :onclick "playerctl shuffle toggle &" :hexpand true
+        (label :text "󰒟"))
+      (button :class "ctrl-btn" :onclick "playerctl previous &" :hexpand true
+        (label :text "󰒮"))
+      (button :class "ctrl-btn play" :onclick "playerctl play-pause &" :hexpand true :halign "center" :valign "center"
+        (label :text {music.play_icon}))
+      (button :class "ctrl-btn" :onclick "playerctl next &" :hexpand true
+        (label :text "󰒭"))
+      (button :class {music.loop_class} :hexpand true
+        :onclick "bash -c 'case $(playerctl loop) in None) playerctl loop Track;; Track) playerctl loop Playlist;; *) playerctl loop None;; esac' &"
+        (label :text {music.loop_icon})))))

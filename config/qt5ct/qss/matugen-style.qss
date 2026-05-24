@@ -1,0 +1,275 @@
+/* =========================================================
+   GLOBAL & BASICS 
+========================================================= */
+QWidget {
+    font-family: "JetBrains Mono";
+    font-size: 11pt;
+    color: #e0e4db;
+    /* REMOVED: background-color: transparent; (Fixes Qt5 transparent rendering bugs) */
+}
+
+QMainWindow, QDialog {
+    background-color: #101510;
+}
+
+QToolTip {
+    background-color: #313630;
+    color: #e0e4db;
+    border: 1px solid #424940;
+    border-radius: 6px;
+    padding: 6px;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+QPushButton {
+    background-color: #272b26;
+    color: #e0e4db;
+    border: 1px solid #424940;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #313630;
+    border: 1px solid #8c9389;
+}
+
+QPushButton:pressed, QPushButton:checked {
+    background-color: #9dd49e;
+    color: #023913;
+    border: 1px solid #9dd49e;
+}
+
+QPushButton:disabled {
+    background-color: #1c211c;
+    color: #8c9389;
+    border: 1px solid transparent;
+}
+
+/* =========================================================
+   INPUTS (Spinners, Dropdowns only)
+   Note: QLineEdit, QTextEdit, and QPlainTextEdit are intentionally 
+   omitted so Telegram's custom chat inputs remain unbroken. 
+   qt5ct/qt6ct will still color them correctly via the palette.
+========================================================= */
+QSpinBox, QDoubleSpinBox, QComboBox {
+    background-color: #0b0f0b;
+    color: #e0e4db;
+    border: 1px solid #8c9389;
+    border-radius: 6px;
+    padding: 6px 10px;
+    selection-background-color: #9dd49e;
+    selection-color: #023913;
+}
+
+QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {
+    border: 2px solid #9dd49e;
+    padding: 5px 9px; /* Compensate for thicker border */
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 24px;
+}
+
+QComboBox::down-arrow {
+    image: none; /* Strip native ugly arrow */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #e0e4db;
+    margin-right: 10px;
+}
+
+/* =========================================================
+   CHECKBOXES & RADIOS
+========================================================= */
+QCheckBox, QRadioButton {
+    spacing: 8px;
+}
+
+QCheckBox::indicator, QRadioButton::indicator {
+    width: 18px;
+    height: 18px;
+    background-color: #0b0f0b;
+    border: 2px solid #8c9389;
+}
+
+QCheckBox::indicator {
+    border-radius: 4px;
+}
+
+QRadioButton::indicator {
+    border-radius: 11px; /* Circular */
+}
+
+QCheckBox::indicator:hover, QRadioButton::indicator:hover {
+    border: 2px solid #9dd49e;
+}
+
+QCheckBox::indicator:checked, QRadioButton::indicator:checked {
+    background-color: #9dd49e;
+    border: 2px solid #9dd49e;
+}
+
+/* Add inner dots/ticks for checked state using borders */
+QRadioButton::indicator:checked {
+    width: 10px;
+    height: 10px;
+    border: 6px solid #9dd49e;
+    background-color: #023913;
+}
+
+/* =========================================================
+   SLIDERS & PROGRESS BARS
+========================================================= */
+QSlider::groove:horizontal {
+    border-radius: 3px;
+    height: 6px;
+    background: #313630;
+}
+
+QSlider::sub-page:horizontal {
+    background: #9dd49e;
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal {
+    background: #9dd49e;
+    width: 16px;
+    height: 16px;
+    margin: -5px 0; /* Align handle with groove */
+    border-radius: 8px;
+}
+
+QSlider::handle:horizontal:hover {
+    background: #1e5027;
+    border: 2px solid #9dd49e;
+}
+
+QProgressBar {
+    background-color: #313630;
+    border-radius: 6px;
+    text-align: center;
+    color: #e0e4db;
+}
+
+QProgressBar::chunk {
+    background-color: #9dd49e;
+    border-radius: 6px;
+}
+
+/* =========================================================
+   TABS & GROUP BOXES
+========================================================= */
+QTabWidget::pane {
+    border: 1px solid #424940;
+    border-radius: 8px;
+    background: #101510;
+    top: -1px;
+}
+
+QTabBar::tab {
+    background: transparent;
+    color: #c1c9be;
+    padding: 8px 16px;
+    border-bottom: 2px solid transparent;
+}
+
+QTabBar::tab:hover {
+    color: #e0e4db;
+    background: #0b0f0b;
+}
+
+QTabBar::tab:selected {
+    color: #9dd49e;
+    border-bottom: 2px solid #9dd49e;
+    font-weight: bold;
+}
+
+QGroupBox {
+    border: 1px solid #424940;
+    border-radius: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 8px;
+    color: #9dd49e;
+    font-weight: bold;
+}
+
+/* =========================================================
+   VIEWS (Lists, Trees, Tables)
+========================================================= */
+QTreeView, QListView, QTableView {
+    background-color: #0b0f0b;
+    alternate-background-color: #101510;
+    border: 1px solid #424940;
+    border-radius: 6px;
+    gridline-color: #272b26;
+}
+
+QTreeView::item:selected, QListView::item:selected, QTableView::item:selected {
+    background-color: #9dd49e;
+    color: #023913;
+}
+
+/* =========================================================
+   MENUS
+========================================================= */
+QMenuBar {
+    background-color: transparent;
+}
+
+QMenuBar::item:selected {
+    background-color: #272b26;
+    border-radius: 4px;
+}
+
+QMenu {
+    background-color: #272b26;
+    border: 1px solid #424940;
+    border-radius: 8px;
+    padding: 6px;
+}
+
+QMenu::item {
+    padding: 6px 24px;
+    border-radius: 4px;
+}
+
+QMenu::item:selected {
+    background-color: #9dd49e;
+    color: #023913;
+}
+
+/* =========================================================
+   SCROLLBARS
+========================================================= */
+QScrollBar:vertical {
+    border: none;
+    background: #1c211c;
+    width: 12px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:vertical {
+    background: #424940;
+    min-height: 30px;
+    border-radius: 6px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #8c9389;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px; /* Hide arrows */
+}

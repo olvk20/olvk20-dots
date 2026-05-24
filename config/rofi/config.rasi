@@ -1,0 +1,3 @@
+configuration {
+    click-to-exit: true;
+}

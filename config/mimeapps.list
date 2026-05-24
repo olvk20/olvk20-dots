@@ -1,0 +1,14 @@
+[Default Applications]
+text/x-qml=org.xfce.mousepad.desktop
+x-scheme-handler/jetbrains=jetbrainsd.desktop
+text/css=org.xfce.mousepad.desktop
+text/plain=org.xfce.mousepad.desktop
+application/x-shellscript=org.xfce.mousepad.desktop
+text/x-csrc=visual-studio-code-electron.desktop
+
+[Added Associations]
+text/x-qml=org.xfce.mousepad.desktop;
+text/css=org.xfce.mousepad.desktop;
+text/plain=org.xfce.mousepad.desktop;
+application/x-shellscript=org.xfce.mousepad.desktop;
+text/x-csrc=visual-studio-code-electron.desktop;
