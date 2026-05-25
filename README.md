@@ -15,15 +15,15 @@ My Arch Linux dotfiles — Hyprland + Waybar + Matugen theming.
 
 <table border="0" cellspacing="6">
   <tr>
-    <td rowspan="2"><img src="Preview/full-desktop.png" width="540"/></td>
-    <td><img src="Preview/wifi-menu.png" width="220"/></td>
+    <td rowspan="2"><img src="Preview/full-desktop.png" width="672"/></td>
+    <td><img src="Preview/wifi-menu.png" height="210"/></td>
   </tr>
   <tr>
-    <td><img src="Preview/bluetooth-menu.png" width="220"/></td>
+    <td><img src="Preview/bluetooth-menu.png" height="210"/></td>
   </tr>
   <tr>
-    <td><img src="Preview/battery-menu.png" width="265"/></td>
-    <td><img src="Preview/volume-menu-beta.png" width="265"/></td>
+    <td><img src="Preview/battery-menu.png" height="210"/></td>
+    <td><img src="Preview/volume-menu-beta.png" height="210"/></td>
   </tr>
 </table>
 
