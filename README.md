@@ -13,14 +13,19 @@ My Arch Linux dotfiles — Hyprland + Waybar + Matugen theming.
 
 ## Preview
 
-![Full desktop](Preview/full-desktop.png)
-
-<p align="center">
-  <img src="Preview/wifi-menu.png" width="24%" />
-  <img src="Preview/bluetooth-menu.png" width="24%" />
-  <img src="Preview/battery-menu.png" width="24%" />
-  <img src="Preview/volume-menu-beta.png" width="24%" />
-</p>
+<table border="0" cellspacing="6">
+  <tr>
+    <td rowspan="2"><img src="Preview/full-desktop.png" width="540"/></td>
+    <td><img src="Preview/wifi-menu.png" width="220"/></td>
+  </tr>
+  <tr>
+    <td><img src="Preview/bluetooth-menu.png" width="220"/></td>
+  </tr>
+  <tr>
+    <td><img src="Preview/battery-menu.png" width="265"/></td>
+    <td><img src="Preview/volume-menu-beta.png" width="265"/></td>
+  </tr>
+</table>
 
 # CAUTION
 My dotfiles include the apps needed to run a desktop and styling, they do not include apps like firefox or visual studio code. My dotfiles are not a development environment
