@@ -11,6 +11,17 @@ My Arch Linux dotfiles — Hyprland + Waybar + Matugen theming.
 - **Notifications**: SwayNC
 - **Editor**: Neovim
 
+## Preview
+
+![Full desktop](Preview/full-desktop.png)
+
+<p align="center">
+  <img src="Preview/wifi-menu.png" width="24%" />
+  <img src="Preview/bluetooth-menu.png" width="24%" />
+  <img src="Preview/battery-menu.png" width="24%" />
+  <img src="Preview/volume-menu-beta.png" width="24%" />
+</p>
+
 # CAUTION
 My dotfiles include the apps needed to run a desktop and styling, they do not include apps like firefox or visual studio code. My dotfiles are not a development environment
 

@@ -188,7 +188,7 @@ window#waybar {
 #network.disabled {
     background: alpha(@wb_surface, 0.65);
     color: @wb_fg;
-    padding: 0 13px 0 6px;
+    padding: 0 13px 0 8px;
 }
 
 #bluetooth.connected {

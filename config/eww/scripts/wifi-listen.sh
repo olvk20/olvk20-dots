@@ -5,7 +5,7 @@
 ~/.config/eww/scripts/wifi.sh
 
 nmcli monitor 2>/dev/null | while IFS= read -r line; do
-    if echo "$line" | grep -qE "connected|disconnected|added|removed|connectivity"; then
+    if echo "$line" | grep -qE "connected|disconnected|added|removed|connectivity|radio|unavailable|activated|activating|deactivating"; then
         sleep 0.5
         ~/.config/eww/scripts/wifi.sh
     fi
