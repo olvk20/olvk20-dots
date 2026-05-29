@@ -29,7 +29,7 @@ My Arch Linux dotfiles — Hyprland + Waybar + Matugen theming.
 </table>
 
 # CAUTION
-My dotfiles include the apps needed to run a desktop and styling, they do not include apps like firefox or visual studio code. My dotfiles are not a development environment
+My dotfiles include packages required to run a desktop and styling, they do not include apps like firefox or visual studio code. My dotfiles are not a development environment
 
 ## Latest beta version
 > This clones directly from the main branch. For a stable snapshot, install from the [releases page](https://github.com/olvk20/olvk20-dots/releases) instead.
