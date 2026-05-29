@@ -23,7 +23,7 @@
     "custom/media": {
         "exec": "bash ~/.config/rofi/scripts/media_waybar.sh",
         "return-type": "json",
-        "on-click": "eww open --toggle music-menu",
+        "on-click": "eww open music-menu --toggle --screen $(~/.config/eww/scripts/get-monitor.sh)",
         "escape": true,
         "max-length": 40
     },

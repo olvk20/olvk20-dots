@@ -11,5 +11,5 @@ else
     eww update wifi-connect-ssid="$SSID"
     eww update wifi-connect-pass=""
     eww close wifi-nets
-    eww open wifi-password
+    eww open wifi-password --screen "$(~/.config/eww/scripts/get-monitor.sh)"
 fi

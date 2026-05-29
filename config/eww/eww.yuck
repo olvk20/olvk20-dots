@@ -62,7 +62,7 @@
              :onchange "eww update wifi-connect-pass={}"))
     (box :class "action-row" :orientation "h" :spacing 8
       (button :class "pill-btn" :hexpand true
-        :onclick "eww close wifi-password; eww open wifi-nets; eww update wifi-connect-pass=\"\""
+        :onclick "eww close wifi-password; eww open wifi-nets --screen $(~/.config/eww/scripts/get-monitor.sh); eww update wifi-connect-pass=\"\""
         (label :text "Cancel"))
       (button :class "pill-btn active" :hexpand true
         :onclick "bash ~/.config/eww/scripts/wifi-do-connect.sh &"
@@ -93,13 +93,13 @@
           (label :text "Disconnect"))))
     (box :class "nav-section" :orientation "v" :spacing 4
       (button :class {wifi.nav_class} :hexpand true
-        :onclick "eww update wifi-networks=\"$(~/.config/eww/scripts/wifi-networks.sh)\"; eww open wifi-nets; eww close wifi-menu"
+        :onclick "eww update wifi-networks=\"$(~/.config/eww/scripts/wifi-networks.sh)\"; eww open wifi-nets --screen $(~/.config/eww/scripts/get-monitor.sh); eww close wifi-menu"
         (box :orientation "h" :spacing 8 :hexpand true
           (label :text "󰍡")
           (label :class "nav-label" :hexpand true :halign "start" :text "Scan Networks")
           (label :class "nav-arrow" :text "›")))
       (button :class "nav-btn" :hexpand true
-        :onclick "eww open bt-menu; eww close wifi-menu"
+        :onclick "eww open bt-menu --screen $(~/.config/eww/scripts/get-monitor.sh); eww close wifi-menu"
         (box :orientation "h" :spacing 8 :hexpand true
           (label :text "󰂯")
           (label :class "nav-label" :hexpand true :halign "start" :text "Bluetooth")
@@ -115,7 +115,7 @@
   :stacking "overlay" :exclusive false :focusable true
   (box :class "menu-root" :orientation "v" :spacing 0
     (box :class "back-row" :orientation "h" :spacing 6
-      (button :class "back-btn" :hexpand true :onclick "eww close wifi-nets; eww open wifi-menu"
+      (button :class "back-btn" :hexpand true :onclick "eww close wifi-nets; eww open wifi-menu --screen $(~/.config/eww/scripts/get-monitor.sh)"
         (label :text "‹  Back"))
       (button :class "back-btn" :hexpand true :onclick "eww update wifi-networks=\"$(~/.config/eww/scripts/wifi-networks.sh)\""
         (label :text "󰍡  Rescan")))
@@ -154,19 +154,19 @@
           (label :text "Disconnect"))))
     (box :class "nav-section" :orientation "v" :spacing 4
       (button :class {bluetooth.nav_class} :hexpand true
-        :onclick "eww update bt-devices=\"$(~/.config/eww/scripts/bt-devices.sh scan)\"; eww open bt-scan; eww close bt-menu"
+        :onclick "eww update bt-devices=\"$(~/.config/eww/scripts/bt-devices.sh scan)\"; eww open bt-scan --screen $(~/.config/eww/scripts/get-monitor.sh); eww close bt-menu"
         (box :orientation "h" :spacing 8 :hexpand true
           (label :text "󰍱")
           (label :class "nav-label" :hexpand true :halign "start" :text "Scan Devices")
           (label :class "nav-arrow" :text "›")))
       (button :class "nav-btn" :hexpand true
-        :onclick "eww update bt-devices=\"$(~/.config/eww/scripts/bt-devices.sh known)\"; eww open bt-known; eww close bt-menu"
+        :onclick "eww update bt-devices=\"$(~/.config/eww/scripts/bt-devices.sh known)\"; eww open bt-known --screen $(~/.config/eww/scripts/get-monitor.sh); eww close bt-menu"
         (box :orientation "h" :spacing 8 :hexpand true
           (label :text "󰂯")
           (label :class "nav-label" :hexpand true :halign "start" :text "Known Devices")
           (label :class "nav-arrow" :text "›")))
       (button :class "nav-btn" :hexpand true
-        :onclick "eww open wifi-menu; eww close bt-menu"
+        :onclick "eww open wifi-menu --screen $(~/.config/eww/scripts/get-monitor.sh); eww close bt-menu"
         (box :orientation "h" :spacing 8 :hexpand true
           (label :text "󰤨")
           (label :class "nav-label" :hexpand true :halign "start" :text "WiFi")
@@ -182,7 +182,7 @@
   :stacking "overlay" :exclusive false :focusable true
   (box :class "menu-root" :orientation "v" :spacing 0
     (box :class "back-row" :orientation "h" :spacing 6
-      (button :class "back-btn" :hexpand true :onclick "eww close bt-scan; eww open bt-menu"
+      (button :class "back-btn" :hexpand true :onclick "eww close bt-scan; eww open bt-menu --screen $(~/.config/eww/scripts/get-monitor.sh)"
         (label :text "‹  Back"))
       (button :class "back-btn" :hexpand true :onclick "eww update bt-devices=\"$(~/.config/eww/scripts/bt-devices.sh scan)\""
         (label :text "󰍱  Rescan")))
@@ -202,7 +202,7 @@
   :stacking "overlay" :exclusive false :focusable true
   (box :class "menu-root" :orientation "v" :spacing 0
     (box :class "back-row" :orientation "h" :spacing 6
-      (button :class "back-btn" :hexpand true :onclick "eww close bt-known; eww open bt-menu"
+      (button :class "back-btn" :hexpand true :onclick "eww close bt-known; eww open bt-menu --screen $(~/.config/eww/scripts/get-monitor.sh)"
         (label :text "‹  Back"))
       (button :class "back-btn" :hexpand true :onclick "eww update bt-devices=\"$(~/.config/eww/scripts/bt-devices.sh known)\""
         (label :text "󰂰  Refresh")))

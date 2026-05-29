@@ -13,5 +13,5 @@ else
         wifi-menu)  eww update wifi="$(~/.config/eww/scripts/wifi.sh)" ;;
         bt-menu)    eww update bluetooth="$(~/.config/eww/scripts/bluetooth.sh)" ;;
     esac
-    eww open "$MENU"
+    eww open "$MENU" --screen "$(~/.config/eww/scripts/get-monitor.sh)"
 fi
